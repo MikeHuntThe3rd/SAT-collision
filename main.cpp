@@ -84,10 +84,10 @@ std::vector<std::pair<float, float>> FindEdges(sf::RectangleShape obj, std::pair
 }
 
 int main() {
-    sf::RenderWindow window(sf::VideoMode::getDesktopMode(), "amongus", sf::Style::None);
-
+    //sf::RenderWindow window(sf::VideoMode::getDesktopMode(), "amongus", sf::Style::None);
+    sf::RenderWindow window(sf::VideoMode({1000, 500}), "amongus", sf::Style::None);
     sf::RectangleShape rect1(sf::Vector2f(100.f, 100.f));
-    rect1.setPosition({ 100.f, 200.f });
+    rect1.setPosition({ 500.f, 200.f });
     rect1.setFillColor(sf::Color::Green);
 
     sf::RectangleShape rect2(sf::Vector2f(100.f, 100.f));
@@ -101,6 +101,7 @@ int main() {
             if (sf::Mouse::isButtonPressed(sf::Mouse::Button::Left)) {
                 rect1.rotate(sf::degrees(5));
             }
+            if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::P)) window.close();
         }
         sf::Vector2f mouse = sf::Vector2f(sf::Mouse::getPosition());
         if (objcords.x < mouse.x && !intersects({ FindEdges(rect1, { 1.0f, 0.0f }), FindEdges(rect2, { 1.0f, 0.0f }) })) {
