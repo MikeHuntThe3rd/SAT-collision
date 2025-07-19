@@ -84,8 +84,8 @@ std::vector<std::pair<float, float>> FindEdges(sf::RectangleShape obj, std::pair
 }
 
 int main() {
-    //sf::RenderWindow window(sf::VideoMode::getDesktopMode(), "amongus", sf::Style::None);
-    sf::RenderWindow window(sf::VideoMode({1000, 500}), "amongus", sf::Style::None);
+    sf::RenderWindow window(sf::VideoMode::getDesktopMode(), "amongus", sf::Style::None);
+    //sf::RenderWindow window(sf::VideoMode({1000, 500}), "amongus", sf::Style::None);
     sf::RectangleShape rect1(sf::Vector2f(100.f, 100.f));
     rect1.setPosition({ 500.f, 200.f });
     rect1.setFillColor(sf::Color::Green);
@@ -103,26 +103,29 @@ int main() {
             }
             if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::P)) window.close();
         }
-        sf::Vector2f mouse = sf::Vector2f(sf::Mouse::getPosition());
-        if (objcords.x < mouse.x && !intersects({ FindEdges(rect1, { 1.0f, 0.0f }), FindEdges(rect2, { 1.0f, 0.0f }) })) {
+        sf::Vector2f mouse = static_cast<sf::Vector2f>(sf::Mouse::getPosition(window));
+
+        prev = objcords;
+
+        if (objcords.x < mouse.x && !intersects({ FindEdges(rect1, {1.0f, 0.0f}), FindEdges(rect2) })) {
             objcords.x += 1.0f;
         }
-        else if (objcords.x > mouse.x && !intersects({ FindEdges(rect1, { -1.0f, 0.0f }), FindEdges(rect2, { -1.0f, 0.0f }) })) {
+        else if (objcords.x > mouse.x && !intersects({ FindEdges(rect1, {-1.0f, 0.0f}), FindEdges(rect2) })) {
             objcords.x -= 1.0f;
         }
-        //ghf
-        if (objcords.y < mouse.x && !intersects({ FindEdges(rect1, { 0.0f, 1.0f }), FindEdges(rect2, { 0.0f, 1.0f }) })) {
+
+        if (objcords.y < mouse.y && !intersects({ FindEdges(rect1, {0.0f, 1.0f}), FindEdges(rect2) })) {
             objcords.y += 1.0f;
         }
-        else if (objcords.y > mouse.x && !intersects({ FindEdges(rect1, { 0.0f, -1.0f }), FindEdges(rect2, { 0.0f, -1.0f }) })) {
+        else if (objcords.y > mouse.y && !intersects({ FindEdges(rect1, {0.0f, -1.0f}), FindEdges(rect2) })) {
             objcords.y -= 1.0f;
         }
+
         rect1.setPosition(objcords);
-        if (!intersects({ FindEdges(rect1), FindEdges(rect2) })) {
+
+        if (intersects({ FindEdges(rect1), FindEdges(rect2) })) {
             rect1.setPosition(prev);
-        }
-        else {
-            prev = rect1.getPosition();
+            objcords = prev;
         }
         window.clear();
         window.draw(rect1);
